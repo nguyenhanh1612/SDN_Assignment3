@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Danh Mục</title>
+    <link rel="stylesheet" href="/css/products.css">
+    <script src="/js/main.js"></script> 
+</head>
+<body>
+    <h1>Quản Lý Danh Mục</h1>
+    <button id="addProductBtn">Thêm Danh Mục</button>
+    
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Danh Mục</th>
+                <th>Giá</th>
+                <th>Mô tả</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% products.forEach(product => { %>
+                <tr id="product-<%= product._id %>">
+                    <td><%= product._id %></td>
+                    <td><%= product.name %></td>
+                    <td><%= product.price %></td>
+                    <td><%= product.description %></td>
+                    <td>
+                        <button onclick="editProduct('<%= product._id %>')">Sửa</button>
+                        <button onclick="deleteProduct('<%= product._id %>')">Xóa</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- Popup thêm/sửa danh mục -->
+    <div id="productModal" style="display: none;">
+        <h2 id="modalTitle">Thêm Danh Mục</h2>
+        <input type="hidden" id="productId" />
+        <input type="text" id="productName" placeholder="Tên Danh Mục" />
+        <input type="number" id="productPrice" placeholder="Giá" />
+        <input type="text" id="productDescription" placeholder="Mô Tả" />
+        <button id="saveProductBtn">Lưu</button>
+        <button onclick="closeModal()">Hủy</button>
+    </div>
+
+    <script>
+        // Hàm để mở modal thêm/sửa danh mục
+        document.getElementById('addProductBtn').onclick = function() {
+            document.getElementById('modalTitle').innerText = 'Thêm Danh Mục';
+            document.getElementById('productName').value = '';
+            document.getElementById('productId').value = '';
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function editProduct(productId) {
+            const row = document.getElementById(`product-${productId}`);
+            const name = row.cells[1].innerText;
+
+            document.getElementById('modalTitle').innerText = 'Sửa Danh Mục';
+            document.getElementById('productName').value = name;
+            document.getElementById('productId').value = productId;
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        document.getElementById('saveProductBtn').onclick = function() {
+    const productId = document.getElementById('productId').value;
+    const name = document.getElementById('productName').value;
+    const price = Number(document.getElementById('productPrice').value); // Chuyển đổi thành số
+    const description = document.getElementById('productDescription').value;
+
+    console.log("ID:", productId);
+    console.log("Name:", name);
+    console.log("Price:", price);
+    console.log("Description:", description);
+
+    // Kiểm tra thông tin
+    if (!name || isNaN(price) || !description) {
+        alert('Vui lòng điền đầy đủ thông tin!');
+        return;
+    }
+
+    const method = productId ? 'PUT' : 'POST';
+    const url = productId ? `/api/products/${productId}` : '/api/products';
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, price, description }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(text || 'Có lỗi xảy ra');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Cập nhật danh sách sản phẩm
+        if (method === 'POST') {
+            const newRow = document.createElement('tr');
+            newRow.id = `product-${data._id}`;
+            newRow.innerHTML = `
+                <td>${data._id}</td>
+                <td>${data.name}</td>
+                <td>${data.price}</td>
+                <td>${data.description}</td>
+                <td>
+                    <button onclick="editProduct('${data._id}')">Sửa</button>
+                    <button onclick="deleteProduct('${data._id}')">Xóa</button>
+                </td>
+            `;
+            document.querySelector('#productTable tbody').appendChild(newRow);
+        } else {
+            const row = document.getElementById(`product-${productId}`);
+            row.cells[1].innerText = name;
+            row.cells[2].innerText = price; // Cập nhật giá
+            row.cells[3].innerText = description; // Cập nhật mô tả
+        }
+        closeModal();
+    })
+    .catch(error => {
+        console.error(error);
+        alert('Có lỗi xảy ra: ' + error.message);
+    });
+}
+
+
+        function deleteProduct(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa danh mục này không?')) {
+                fetch(`/api/products/${id}`, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok) throw new Error('Có lỗi xảy ra');
+                    document.getElementById(`product-${id}`).remove();
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

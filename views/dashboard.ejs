@@ -1,0 +1,65 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="/js/main.js" defer></script>
+</head>
+<body>
+    <p style="text-align: center;"> <a href="/dashboard/products">Product</a></p>
+    <p style="text-align: center;"> <a href="/dashboard/categories">Category</a></p>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script>
+        function showContent(section) {
+            const mainContent = document.querySelector('.main-content');
+            let url = '';
+            
+            if (section === 'categories') {
+                url = '/dashboard/categories';
+            } else if (section === 'products') {
+                url = '/dashboard/products';
+            }
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    mainContent.innerHTML = data;
+                })
+                .catch(error => {
+                    mainContent.innerHTML = '<p>Không thể tải nội dung.</p>';
+                    console.error('Error fetching content:', error);
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <h2>Quản Lý Admin</h2>
+            <ul>
+                <li><a href="/dashboard/categories" onclick="showContent('categories')">Quản Lý Categories</a></li>
+                <li><a href="/dashboard/products" onclick="showContent('products')">Quản Lý Products</a></li>
+            </ul>
+        </aside>
+
+        
+        <main class="main-content">
+            <h1>Chào mừng đến với Dashboard</h1>
+        </main>
+    </div>
+</body>
+</html>
+
+
+
+

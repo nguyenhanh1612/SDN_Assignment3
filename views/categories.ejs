@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Danh Mục</title>
+    <link rel="stylesheet" href="/css/categories.css">
+    <script src="/js/main.js"></script> 
+</head>
+<body>
+    <h1>Quản Lý Danh Mục</h1>
+    <button id="addCategoryBtn">Thêm Danh Mục</button>
+    
+    <table id="categoryTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Danh Mục</th>
+                <th>Mô Tả</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% categories.forEach(category => { %>
+                <tr id="category-<%= category._id %>">
+                    <td><%= category._id %></td>
+                    <td><%= category.name %></td>
+                    <td><%= category.description %></td>
+                    <td>
+                        <button onclick="editCategory('<%= category._id %>')">Sửa</button>
+                        <button onclick="deleteCategory('<%= category._id %>')">Xóa</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- Popup thêm/sửa danh mục -->
+    <div id="categoryModal" style="display: none;">
+        <h2 id="modalTitle">Thêm Danh Mục</h2>
+        <input type="hidden" id="categoryId" />
+        <input type="text" id="categoryName" placeholder="Tên Danh Mục" />
+        <input type="text" id="categoryDescription" placeholder="Mô Tả Danh Mục" />
+        <button id="saveCategoryBtn">Lưu</button>
+        <button onclick="closeModal()">Hủy</button>
+    </div>
+
+    <script>
+        // Hàm để mở modal thêm/sửa danh mục
+        document.getElementById('addCategoryBtn').onclick = function() {
+            document.getElementById('modalTitle').innerText = 'Thêm Danh Mục';
+            document.getElementById('categoryName').value = ''; // Đặt giá trị trường tên danh mục là rỗng
+            document.getElementById('categoryId').value = ''; // Đặt giá trị ID là rỗng
+            document.getElementById('categoryModal').style.display = 'block'; // Hiện modal
+        }
+
+        function editCategory(id) {
+            const row = document.getElementById(`category-${id}`);
+            const name = row.cells[1].innerText;
+
+            document.getElementById('modalTitle').innerText = 'Sửa Danh Mục';
+            document.getElementById('categoryName').value = name; // Đặt tên danh mục trong modal
+            document.getElementById('categoryId').value = id; // Lưu ID danh mục
+            document.getElementById('categoryModal').style.display = 'block'; // Hiện modal
+        }
+
+        function closeModal() {
+            document.getElementById('categoryModal').style.display = 'none'; // Ẩn modal
+        }
+
+        document.getElementById('saveCategoryBtn').onclick = function() {
+    const id = document.getElementById('categoryId').value;
+    const name = document.getElementById('categoryName').value;
+    const description = document.getElementById('categoryDescription').value; // Lấy mô tả
+
+    // Kiểm tra tên danh mục không để trống
+    if (!name.trim()) {
+        alert('Tên danh mục không được để trống.');
+        return;
+    }
+
+    // Kiểm tra mô tả không để trống
+    if (!description.trim()) {
+        alert('Mô tả danh mục không được để trống.');
+        return;
+    }
+
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `/api/categories/${id}` : '/api/categories';
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, description }), // Gửi cả name và description
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(text); // Ném lỗi với nội dung phản hồi
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Cập nhật danh sách categories
+        if (method === 'POST') {
+            const newRow = document.createElement('tr');
+            newRow.id = `category-${data._id}`;
+            newRow.innerHTML = `
+                <td>${data._id}</td>
+                <td>${data.name}</td>
+                <td>${data.description}</td> <!-- Thêm mô tả vào bảng -->
+                <td>
+                    <button onclick="editCategory('${data._id}')">Sửa</button>
+                    <button onclick="deleteCategory('${data._id}')">Xóa</button>
+                </td>
+            `;
+            document.querySelector('#categoryTable tbody').appendChild(newRow);
+        } else {
+            const row = document.getElementById(`category-${id}`);
+            row.cells[1].innerText = name;
+            row.cells[2].innerText = description; // Cập nhật mô tả
+        }
+        closeModal();
+    })
+    .catch(error => {
+        console.error(error);
+        alert('Có lỗi xảy ra. Vui lòng thử lại.');
+    });
+}
+
+        function deleteCategory(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa danh mục này không?')) {
+                fetch(`/api/categories/${id}`, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok) throw new Error('Có lỗi xảy ra');
+                    document.getElementById(`category-${id}`).remove(); // Xóa hàng danh mục khỏi bảng
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
