@@ -55,6 +55,7 @@
         }
 
         function editCategory(id) {
+            console.log("Sửa")
             const row = document.getElementById(`category-${id}`);
             const name = row.cells[1].innerText;
 
@@ -93,7 +94,7 @@
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, description }), // Gửi cả name và description
+        body: JSON.stringify({ name, description }),
     })
     .then(response => {
         if (!response.ok) {

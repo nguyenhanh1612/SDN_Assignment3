@@ -10,5 +10,6 @@ router.get("/products", authenticateToken, showProducts);
 
 router.get("/", showDashboard);
 
+
 module.exports = router;
 

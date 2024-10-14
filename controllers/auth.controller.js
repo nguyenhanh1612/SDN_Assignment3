@@ -20,7 +20,7 @@ const register = async (req, res) => {
 
     const newAccount = new Account({ username, password });
     await newAccount.save();
-    res.status(201).json({ message: "Account created successfully" });
+    return res.redirect("/api/auth/login");
   } catch (error) {
     console.error("Error creating account", error);
     res.status(500).json({ message: "Error creating account", error });
@@ -31,7 +31,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { username, password } = req.body;
   console.log("hello", req.body);
-  console.log(password, username)
+  console.log(password, username);
   if (!username || !password) {
     return res
       .status(400)
@@ -40,7 +40,7 @@ const login = async (req, res) => {
 
   try {
     const account = await Account.findOne({ username });
-    console.log("Account đây: ", account)
+    console.log("Account đây: ", account);
     if (!account) {
       return res.status(404).json({ message: "Account not found" });
     }
@@ -70,6 +70,9 @@ const showFormLogin = (req, res) => {
   res.render("login");
 };
 
+const showFormRegister = (req, res) => {
+  res.render("register");
+};
 
 const deleteAccount = async (req, res) => {
   const { username } = req.body;
@@ -91,4 +94,10 @@ const deleteAccount = async (req, res) => {
   }
 };
 
-module.exports = { register, login, deleteAccount, showFormLogin };
+module.exports = {
+  register,
+  login,
+  deleteAccount,
+  showFormLogin,
+  showFormRegister,
+};

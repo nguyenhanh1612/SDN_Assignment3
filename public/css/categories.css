@@ -12,82 +12,82 @@ h1 {
 }
 
 button {
-  background-color: #4caf50; /* Màu nền xanh lá cây */
-  color: white; /* Màu chữ trắng */
-  border: none; /* Không có đường viền */
-  padding: 10px 15px; /* Khoảng cách bên trong */
-  text-align: center; /* Căn giữa văn bản */
-  text-decoration: none; /* Không có gạch chân */
-  display: inline-block; /* Hiển thị như một khối linline */
-  font-size: 16px; /* Kích thước chữ */
-  margin: 4px 2px; /* Khoảng cách giữa các nút */
-  cursor: pointer; /* Con trỏ chuột khi di chuột qua */
-  border-radius: 5px; /* Bo góc */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền */
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #45a049; /* Màu nền khi di chuột qua */
+  background-color: #45a049;
 }
 
 table {
-  width: 100%; /* Chiều rộng 100% */
-  border-collapse: collapse; /* Hợp nhất đường viền */
-  margin-top: 20px; /* Khoảng cách trên bảng */
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
 th,
 td {
-  border: 1px solid #ddd; /* Đường viền xung quanh ô */
-  padding: 8px; /* Khoảng cách bên trong ô */
-  text-align: left; /* Căn trái văn bản */
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
 th {
-  background-color: #4caf50; /* Màu nền cho tiêu đề */
-  color: white; /* Màu chữ cho tiêu đề */
+  background-color: #4caf50;
+  color: white;
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2; /* Màu nền cho hàng chẵn */
+  background-color: #f2f2f2;
 }
 
 #categoryModal {
-  position: fixed; /* Vị trí cố định */
+  position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
-  display: flex; /* Sử dụng flexbox */
-  justify-content: center; /* Căn giữa theo chiều ngang */
-  align-items: center; /* Căn giữa theo chiều dọc */
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #categoryModal > div {
-  background-color: white; /* Nền trắng cho modal */
-  padding: 20px; /* Khoảng cách bên trong */
-  border-radius: 10px; /* Bo góc */
-  width: 300px; /* Chiều rộng modal */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 #categoryName {
-  width: 100%; /* Chiều rộng 100% */
-  padding: 10px; /* Khoảng cách bên trong */
-  margin-top: 10px; /* Khoảng cách trên trường nhập */
-  border: 1px solid #ddd; /* Đường viền xung quanh trường nhập */
-  border-radius: 5px; /* Bo góc */
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 #categoryDescription {
-  width: 100%; /* Chiều rộng 100% */
-  padding: 10px; /* Khoảng cách bên trong */
-  margin-top: 10px; /* Khoảng cách trên trường nhập */
-  border: 1px solid #ddd; /* Đường viền xung quanh trường nhập */
-  border-radius: 5px; /* Bo góc */
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 #saveCategoryBtn {
-  background-color: #4caf50; /* Màu nền xanh lá cây */
-  margin-top: 10px; /* Khoảng cách trên nút lưu */
+  background-color: #4caf50;
+  margin-top: 10px;
 }

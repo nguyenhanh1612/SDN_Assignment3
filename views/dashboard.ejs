@@ -21,38 +21,48 @@
     <link rel="stylesheet" href="/css/dashboard.css">
     <script>
         function showContent(section) {
-            const mainContent = document.querySelector('.main-content');
-            let url = '';
-            
+            let url;
             if (section === 'categories') {
                 url = '/dashboard/categories';
             } else if (section === 'products') {
                 url = '/dashboard/products';
             }
-
+    
             fetch(url)
                 .then(response => response.text())
-                .then(data => {
-                    mainContent.innerHTML = data;
+                .then(html => {
+                    document.getElementById('mainContent').innerHTML = html;
+                    if (section === 'categories') {
+                        initCategoryEvents(); // Khởi tạo sự kiện cho categories
+                    }
                 })
                 .catch(error => {
-                    mainContent.innerHTML = '<p>Không thể tải nội dung.</p>';
-                    console.error('Error fetching content:', error);
+                    console.error('Có lỗi xảy ra:', error);
                 });
         }
-    </script>
+    
+        function initCategoryEvents() {
+            // Tạo sự kiện cho các nút trong categories.ejs
+            document.getElementById('addCategoryBtn').onclick = function() {
+                // Hiện modal thêm danh mục
+                document.getElementById('modalTitle').innerText = 'Thêm Danh Mục';
+                document.getElementById('categoryName').value = '';
+                document.getElementById('categoryId').value = '';
+                document.getElementById('categoryModal').style.display = 'block';
+            };
+        }
+    </script>    
 </head>
 <body>
     <div class="dashboard-container">
         <aside class="sidebar">
-            <h2>Quản Lý Admin</h2>
+            <h2>ADMIN</h2>
             <ul>
                 <li><a href="/dashboard/categories" onclick="showContent('categories')">Quản Lý Categories</a></li>
                 <li><a href="/dashboard/products" onclick="showContent('products')">Quản Lý Products</a></li>
             </ul>
         </aside>
 
-        
         <main class="main-content">
             <h1>Chào mừng đến với Dashboard</h1>
         </main>
